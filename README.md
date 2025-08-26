@@ -4,16 +4,16 @@ A **fully-featured, native `TextInput` module for Expo** with support for contro
 
 ---
 
-<div style="display: flex; justify-content: space-evenly;" >
+<p align="center" >
     <img
       src="https://github.com/helcioItiyama/NativeInput/blob/main/doc/assets/input.gif?raw=true"
       alt="Android demo"
-      height="500"
+      width="39.2%"
     >
     <img
       src="https://github.com/helcioItiyama/NativeInput/blob/main/doc/assets/input2.gif?raw=true"
       alt="iOS Demo"
-      height="500"
+      width="40%"
     >
   <br>
 </div>
