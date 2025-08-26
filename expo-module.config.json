@@ -1,0 +1,9 @@
+{
+  "platforms": ["apple", "android", "web"],
+  "apple": {
+    "modules": ["NativeInputModule"]
+  },
+  "android": {
+    "modules": ["expo.modules.nativeinput.NativeInputModule"]
+  }
+}
