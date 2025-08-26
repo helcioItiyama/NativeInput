@@ -99,8 +99,7 @@ class NativeInputModule : Module() {
       }
 
       Prop("secureTextEntry") { view: NativeInputView, isSecure: Boolean ->
-        view.isSecure = isSecure
-        view.toggleSecureTextEntry()
+        view.toggleSecureTextEntry(isSecure)
       }
 
       Prop("rightIcon") {view: NativeInputView, source: Map<String, Any>? ->

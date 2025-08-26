@@ -1,6 +1,6 @@
 import { NativeInputView, NativeInputViewRef } from 'native-input';
 import { useRef, useState } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { Alert, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 const inputColors = {
   focused: "#000000",
@@ -30,11 +30,22 @@ export default function App() {
 
   const handleSubmit = () => {
     console.log("Submit")
+    passwordRef.current?.blur()
     setError(true)
+    Alert.alert(
+      "Credential Error", 
+      "Email or Password is incorrect",
+      [{text: "OK", onPress: () => {
+        setError(false),
+        setEmail("")
+        setPassword("")
+        emailRef.current?.focus()
+      }}]
+    )
   }
 
   const hasNameError = name.length > 0 && name.length < 2
-  const hasPhoneError = familyName.length > 0 && setFamilyName.length < 8
+  const hasFamilyNameError = familyName.length > 0 && familyName.length < 2
   const passwordIcon = showPassword ? show : hide
 
   return (
@@ -65,7 +76,7 @@ export default function App() {
           borderColors={inputColors}
           onChangeText={setFamilyName}
           importantForAutofill="yes"
-          error={hasPhoneError}
+          error={hasFamilyNameError}
           onInputSubmit={emailRef.current?.focus}
           returnKeyType="next"
         />
@@ -104,7 +115,7 @@ export default function App() {
           returnKeyType="done"
         />
 
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
           <Text style={styles.buttonLabel}>Submit</Text>
         </TouchableOpacity>
         </ScrollView>

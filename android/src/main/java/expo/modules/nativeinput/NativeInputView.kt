@@ -17,6 +17,7 @@ import expo.modules.kotlin.views.ExpoView
 import java.net.URL
 import android.os.Handler
 import android.view.MotionEvent
+import android.widget.TextView
 import kotlin.concurrent.thread
 
 class NativeInputView(context: Context, appContext: AppContext) : ExpoView(context, appContext) {
@@ -24,7 +25,8 @@ class NativeInputView(context: Context, appContext: AppContext) : ExpoView(conte
   var isError = false
   var isDisabled = false
   var currentColors: Map<String, String> = mapOf()
-  var isSecure = false
+
+  private var pendingSecureToggle: Boolean? = null
 
   private val onInputFocus by EventDispatcher()
   private val onInputBlur by EventDispatcher()
@@ -41,7 +43,15 @@ class NativeInputView(context: Context, appContext: AppContext) : ExpoView(conte
     addView(editText)
 
     editText.setOnFocusChangeListener { _, hasFocus ->
-      if (hasFocus) onInputFocus(emptyMap()) else onInputBlur(emptyMap())
+      if (hasFocus) {
+        if (pendingSecureToggle != null) {
+          applySecureToggle(pendingSecureToggle!!)
+          pendingSecureToggle = null
+        }
+        onInputFocus(emptyMap())
+      } else {
+        onInputBlur(emptyMap())
+      }
       updateBorder()
     }
 
@@ -119,9 +129,26 @@ class NativeInputView(context: Context, appContext: AppContext) : ExpoView(conte
     editText.background = drawable
   }
 
-  fun toggleSecureTextEntry() {
-    editText.transformationMethod = if (isSecure) PasswordTransformationMethod.getInstance() else null
-    editText.setSelection(editText.text.length)
+  fun toggleSecureTextEntry(isSecure: Boolean) {
+    if (editText.isFocused) {
+      applySecureToggle(isSecure)
+    } else {
+      pendingSecureToggle = isSecure
+    }
+  }
+
+  private fun applySecureToggle(isSecure: Boolean) {
+    val start = editText.selectionStart
+    val end = editText.selectionEnd
+
+    editText.transformationMethod = if (isSecure) {
+      PasswordTransformationMethod.getInstance()
+    } else {
+      null
+    }
+
+    editText.setText(editText.text, TextView.BufferType.SPANNABLE)
+    editText.setSelection(start, end)
   }
 
   fun setRightIcon(source: Map<String, Any>?) {
