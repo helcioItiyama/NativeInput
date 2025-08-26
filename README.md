@@ -38,7 +38,7 @@ export default function App() {
   const inputRef = useRef<NativeInputViewRef>(null)
 
   return (
-    <NativeTextInput
+    <NativeInputView
       ref={inputRef}
       borderColors={{
         focused: "#0b278c",
