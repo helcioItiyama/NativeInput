@@ -1,6 +1,7 @@
 package expo.modules.nativeinput
 
 import android.os.Build
+import android.text.Editable
 import android.text.InputType
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -15,6 +16,15 @@ class NativeInputModule : Module() {
 
     View(NativeInputView::class) {
       Events("onInputFocus", "onInputBlur", "onInputChange", "onInputSubmit", "onRightIconClick")
+
+      Prop("text") { view: NativeInputView, text: String ->
+        val editable = view.editText.text
+
+        if (editable.toString() != text) {
+          editable.replace(0, editable.length, text)
+          view.editText.setSelection(text.length)
+        }
+      }
 
       Prop("keyboardType") { view: NativeInputView, type: String ->
         val mappedType = when (type) {
